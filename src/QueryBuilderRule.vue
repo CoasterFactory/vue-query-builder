@@ -46,11 +46,11 @@
     </div>
     <v-card v-else>
       <v-card-title>
-        <h3>{{ rule.label }}</h3>
+        <h3 class="pr-3">{{ rule.label }}</h3>
 
-        <v-select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :items="rule.operands" autocomplete single-line></v-select>
+        <v-select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :items="rule.operands" autocomplete></v-select>
 
-        <v-select v-if="! isMultipleChoice" v-model="query.selectedOperator" :items="rule.operators" autocomplete single-line></v-select>
+        <v-select v-if="! isMultipleChoice" v-model="query.selectedOperator" :items="rule.operators" autocomplete></v-select>
 
         <v-text-field v-if="rule.inputType === 'text'" type="text" v-model="query.value" :placeholder="labels.textInputPlaceholder"></v-text-field>
         <v-text-field v-if="rule.inputType === 'number'" type="number" v-model="query.value"></v-text-field>
@@ -65,9 +65,11 @@
           <v-radio v-for="choice in rule.choices" v-model="query.value" :input-value="choice.value" :label="choice.label"></v-radio>
         </v-radio-group>
 
-        <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete single-line></v-select>
+        <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete></v-select>
 
-        <v-btn @click="remove" v-html="labels.removeRule"></v-btn>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-btn @click="remove" v-html="labels.removeRule" primary></v-btn>
       </v-card-title>
     </v-card>
   </span>

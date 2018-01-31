@@ -47,20 +47,22 @@
         </div>
       </div>
     </div>
-    <v-card v-else>
-      <v-card-title color="blue">
-        <h2>{{ labels.matchType }}</h2>
-        <v-select id="vqb-match-type" v-model="query.logicalOperator" :items="[labels.matchTypeAll, labels.matchTypeAny]" autocomplete single-line></v-select>
-        <span class="text-xs-right">
-          <v-btn v-if="this.depth > 1" @click="remove" v-html="labels.removeGroup"></v-btn>
-        </span>
-      </v-card-title>
-      <v-card-title>
-        <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete single-line></v-select>
+    <v-card color="grey lighten-4" v-else>
+      <v-toolbar color="white" light dense>
+        <h3 class="pr-3">{{ labels.matchType }}</h3>
+        <v-select id="vqb-match-type" v-model="query.logicalOperator" :items="[labels.matchTypeAll, labels.matchTypeAny]" autocomplete></v-select>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-btn v-if="this.depth > 1" @click="remove" v-html="labels.removeGroup" primary></v-btn>
+      </v-toolbar>
+      <v-card-title class="py-0">
+        <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete></v-select>
         <v-btn @click="addRule" v-html="labels.addRule"></v-btn>
-        <v-btn v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup"></v-btn>
+        <v-btn v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup" primary></v-btn>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="pt-0">
         <div class="children">
           <component
             v-for="(child, index) in query.children"
