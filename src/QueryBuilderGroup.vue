@@ -1,50 +1,88 @@
 <template>
-  <div class="vqb-group" :class="classObject">
-    <div class="vqb-group-heading" :class="{ 'panel-heading': styled }">
-      <div class="match-type-container" :class="{ 'form-inline': styled }">
-        <div :class="{ 'form-group': styled }">
-          <label for="vqb-match-type">{{ labels.matchType }}</label>
-          <select id="vqb-match-type" :class="{ 'form-control': styled }" v-model="query.logicalOperator">
-            <option>{{ labels.matchTypeAll }}</option>
-            <option>{{ labels.matchTypeAny }}</option>
-          </select>
-        </div>
-        <button :class="{ 'close pull-right': styled }" v-if="this.depth > 1" @click="remove" v-html="labels.removeGroup"></button>
-      </div>
-    </div>
-
-    <div class="vqb-group-body" :class="{ 'panel-body': styled }">
-      <div class="rule-actions" :class="{ 'form-inline': styled }">
-        <div :class="{ 'form-group': styled }">
-          <select v-model="selectedRule" :class="{ 'form-control': styled }">
-            <option v-for="(rule, index) in rules" :key="index" :value="rule">{{ rule.label }}</option>
-          </select>
-
-          <button @click="addRule" :class="{ 'btn btn-default': styled }" v-html="labels.addRule"></button>
-          <button :class="{ 'btn btn-default': styled }" v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup"></button>
+  <span>
+    <div class="vqb-group" :class="classObject" v-if="!vuetify">
+      <div class="vqb-group-heading" :class="{ 'panel-heading': styled }">
+        <div class="match-type-container" :class="{ 'form-inline': styled }">
+          <div :class="{ 'form-group': styled }">
+            <label for="vqb-match-type">{{ labels.matchType }}</label>
+            <select id="vqb-match-type" :class="{ 'form-control': styled }" v-model="query.logicalOperator">
+              <option>{{ labels.matchTypeAll }}</option>
+              <option>{{ labels.matchTypeAny }}</option>
+            </select>
+          </div>
+          <button :class="{ 'close pull-right': styled }" v-if="this.depth > 1" @click="remove" v-html="labels.removeGroup"></button>
         </div>
       </div>
 
-      <div class="children">
-        <component
-          v-for="(child, index) in query.children"
-          :key="index"
-          :is="child.type"
-          :type="child.type"
-          :query.sync="child.query"
-          :ruleTypes="ruleTypes"
-          :rules="rules"
-          :rule="ruleById(child.query.rule)"
-          :index="index"
-          :maxDepth="maxDepth"
-          :depth="depth + 1"
-          :styled="styled"
-          :labels="labels"
-          v-on:child-deletion-requested="removeChild">
-        </component>
+      <div class="vqb-group-body" :class="{ 'panel-body': styled }">
+        <div class="rule-actions" :class="{ 'form-inline': styled }">
+          <div :class="{ 'form-group': styled }">
+            <select v-model="selectedRule" :class="{ 'form-control': styled }">
+              <option v-for="(rule, index) in rules" :key="index" :value="rule">{{ rule.label }}</option>
+            </select>
+
+            <button @click="addRule" :class="{ 'btn btn-default': styled }" v-html="labels.addRule"></button>
+            <button :class="{ 'btn btn-default': styled }" v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup"></button>
+          </div>
+        </div>
+
+        <div class="children">
+          <component
+            v-for="(child, index) in query.children"
+            :key="index"
+            :is="child.type"
+            :type="child.type"
+            :query.sync="child.query"
+            :ruleTypes="ruleTypes"
+            :rules="rules"
+            :rule="ruleById(child.query.rule)"
+            :index="index"
+            :maxDepth="maxDepth"
+            :depth="depth + 1"
+            :styled="styled"
+            :vuetify="vuetify"
+            :labels="labels"
+            v-on:child-deletion-requested="removeChild">
+          </component>
+        </div>
       </div>
     </div>
-  </div>
+    <v-card v-else>
+      <v-card-title color="blue">
+        <h2>{{ labels.matchType }}</h2>
+        <v-select id="vqb-match-type" v-model="query.logicalOperator" :items="[labels.matchTypeAll, labels.matchTypeAny]" autocomplete single-line></v-select>
+        <span class="text-xs-right">
+          <v-btn v-if="this.depth > 1" @click="remove" v-html="labels.removeGroup"></v-btn>
+        </span>
+      </v-card-title>
+      <v-card-title>
+        <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete single-line></v-select>
+        <v-btn @click="addRule" v-html="labels.addRule"></v-btn>
+        <v-btn v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup"></v-btn>
+      </v-card-title>
+      <v-card-text>
+        <div class="children">
+          <component
+            v-for="(child, index) in query.children"
+            :key="index"
+            :is="child.type"
+            :type="child.type"
+            :query.sync="child.query"
+            :ruleTypes="ruleTypes"
+            :rules="rules"
+            :rule="ruleById(child.query.rule)"
+            :index="index"
+            :maxDepth="maxDepth"
+            :depth="depth + 1"
+            :styled="styled"
+            :vuetify="vuetify"
+            :labels="labels"
+            v-on:child-deletion-requested="removeChild">
+          </component>
+        </div>
+      </v-card-text>
+    </v-card>
+  </span>
 </template>
 
 <script>
@@ -58,7 +96,7 @@ export default {
     QueryBuilderRule
   },
 
-  props: ['ruleTypes', 'type', 'query', 'rules', 'index', 'maxDepth', 'depth', 'styled', 'labels'],
+  props: ['ruleTypes', 'type', 'query', 'rules', 'index', 'maxDepth', 'depth', 'styled', 'vuetify', 'labels'],
 
   methods: {
     ruleById (ruleId) {

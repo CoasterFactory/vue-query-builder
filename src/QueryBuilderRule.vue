@@ -1,48 +1,76 @@
 <template>
-  <div class="vqb-rule" :class="{ 'panel panel-default form-inline': styled }">
-    <div :class="{ 'form-group': styled }">
-      <label>{{ rule.label }}</label>
+  <span>
+    <div class="vqb-rule" :class="{ 'panel panel-default form-inline': styled }" v-if="!vuetify">
+      <div :class="{ 'form-group': styled }">
+        <label>{{ rule.label }}</label>
 
-      <select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :class="{ 'form-control': styled }">
-        <option v-for="operand in rule.operands">{{ operand }}</option>
-      </select>
+        <select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :class="{ 'form-control': styled }">
+          <option v-for="operand in rule.operands">{{ operand }}</option>
+        </select>
 
-      <select v-if="! isMultipleChoice" v-model="query.selectedOperator" :class="{ 'form-control': styled }">
-        <option v-for="operator in rule.operators" v-bind:value="operator">
-          {{ operator }}
-        </option>
-      </select>
+        <select v-if="! isMultipleChoice" v-model="query.selectedOperator" :class="{ 'form-control': styled }">
+          <option v-for="operator in rule.operators" v-bind:value="operator">
+            {{ operator }}
+          </option>
+        </select>
 
-      <input :class="{ 'form-control': styled }" v-if="rule.inputType === 'text'" type="text" v-model="query.value" :placeholder="labels.textInputPlaceholder"></input>
-      <input :class="{ 'form-control': styled }" v-if="rule.inputType === 'number'" type="number" v-model="query.value"></input>
+        <input :class="{ 'form-control': styled }" v-if="rule.inputType === 'text'" type="text" v-model="query.value" :placeholder="labels.textInputPlaceholder"></input>
+        <input :class="{ 'form-control': styled }" v-if="rule.inputType === 'number'" type="number" v-model="query.value"></input>
 
-      <template v-if="isCustomComponent">
-        <component :value="query.value" @input="updateQuery" :is="rule.component" v-bind="rule.props"></component>
-      </template>
+        <template v-if="isCustomComponent">
+          <component :value="query.value" @input="updateQuery" :is="rule.component" v-bind="rule.props"></component>
+        </template>
 
-      <div class="checkbox" v-if="rule.inputType === 'checkbox'">
-        <label v-for="choice in rule.choices">
-          <input type="checkbox" :value="choice.value" v-model="query.value"> {{ choice.label }}
-        </label>
+        <div class="checkbox" v-if="rule.inputType === 'checkbox'">
+          <label v-for="choice in rule.choices">
+            <input type="checkbox" :value="choice.value" v-model="query.value"> {{ choice.label }}
+          </label>
+        </div>
+
+        <div class="radio" v-if="rule.inputType === 'radio'">
+          <label v-for="choice in rule.choices">
+            <input type="radio" :value="choice.value" v-model="query.value"> {{ choice.label }}
+          </label>
+        </div>
+
+        <select
+          v-if="rule.inputType === 'select'"
+          :class="{ 'form-control': styled }"
+          :multiple="rule.type === 'multi-select'"
+          v-model="query.value">
+          <option v-for="choice in rule.choices" :value="choice.value">{{ choice.label }}</option>
+        </select>
+
+        <button :class="{ 'close pull-right': styled }" @click="remove" v-html="labels.removeRule"></button>
       </div>
-
-      <div class="radio" v-if="rule.inputType === 'radio'">
-        <label v-for="choice in rule.choices">
-          <input type="radio" :value="choice.value" v-model="query.value"> {{ choice.label }}
-        </label>
-      </div>
-
-      <select
-        v-if="rule.inputType === 'select'"
-        :class="{ 'form-control': styled }"
-        :multiple="rule.type === 'multi-select'"
-        v-model="query.value">
-        <option v-for="choice in rule.choices" :value="choice.value">{{ choice.label }}</option>
-      </select>
-
-      <button :class="{ 'close pull-right': styled }" @click="remove" v-html="labels.removeRule"></button>
     </div>
-  </div>
+    <v-card v-else>
+      <v-card-title>
+        <h3>{{ rule.label }}</h3>
+
+        <v-select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :items="rule.operands" autocomplete single-line></v-select>
+
+        <v-select v-if="! isMultipleChoice" v-model="query.selectedOperator" :items="rule.operators" autocomplete single-line></v-select>
+
+        <v-text-field v-if="rule.inputType === 'text'" type="text" v-model="query.value" :placeholder="labels.textInputPlaceholder"></v-text-field>
+        <v-text-field v-if="rule.inputType === 'number'" type="number" v-model="query.value"></v-text-field>
+
+        <template v-if="isCustomComponent">
+          <component :value="query.value" @input="updateQuery" :is="rule.component" v-bind="rule.props"></component>
+        </template>
+
+        <v-checkbox v-if="rule.inputType === 'checkbox'" v-for="choice in rule.choices" v-model="query.value" :true-value="choice.value" :label="choice.label"></v-checkbox>
+
+        <v-radio-group v-if="rule.inputType === 'radio'">
+          <v-radio v-for="choice in rule.choices" v-model="query.value" :input-value="choice.value" :label="choice.label"></v-radio>
+        </v-radio-group>
+
+        <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete single-line></v-select>
+
+        <v-btn @click="remove" v-html="labels.removeRule"></v-btn>
+      </v-card-title>
+    </v-card>
+  </span>
 </template>
 
 <script>
@@ -51,7 +79,7 @@ import deepClone from './utilities.js';
 export default {
   name: "query-builder-rule",
 
-  props: ['query', 'index', 'rule', 'styled', 'labels'],
+  props: ['query', 'index', 'rule', 'styled', 'vuetify', 'labels'],
 
   beforeMount () {
     if (this.rule.type === 'custom-component') {
