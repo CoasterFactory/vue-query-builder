@@ -45,7 +45,7 @@
       </div>
     </div>
     <v-card v-else>
-      <v-card-title>
+      <v-card-title class="py-0">
         <h3 class="pr-3">{{ rule.label }}</h3>
 
         <v-select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :items="rule.operands" autocomplete></v-select>

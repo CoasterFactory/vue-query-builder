@@ -57,7 +57,7 @@
       </v-toolbar>
       <v-card-title class="py-0">
         <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete></v-select>
-        <v-btn @click="addRule" v-html="labels.addRule"></v-btn>
+        <v-btn @click="addRule" v-html="labels.addRule" primary></v-btn>
         <v-btn v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup" primary></v-btn>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
