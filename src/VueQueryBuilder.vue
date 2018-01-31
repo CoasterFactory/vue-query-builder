@@ -10,6 +10,7 @@
       :styled="styled"
       :labels="mergedLabels"
       type="query-builder-group"
+      :vuetify="vuetify"
       ></query-builder-group>
   </div>
 </template>
@@ -54,7 +55,8 @@ export default {
         return value >= 1
       }
     },
-    initialQuery: Object
+    initialQuery: Object,
+    vuetify: Boolean
   },
 
   data () {
