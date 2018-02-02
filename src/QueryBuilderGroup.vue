@@ -178,7 +178,7 @@ export default {
 
   watch: {
     rules(val) {
-      this.selectedRule = this.rules[this.rules.indexOf(this.selectedRule)]
+      //this.selectedRule = this.rules[this.rules.indexOf(this.selectedRule)]
     }
   }
 }
