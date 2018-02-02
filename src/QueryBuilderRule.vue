@@ -61,15 +61,15 @@
 
         <v-checkbox v-if="rule.inputType === 'checkbox'" v-for="choice in rule.choices" v-model="query.value" :true-value="choice.value" :label="choice.label"></v-checkbox>
 
-        <v-radio-group v-if="rule.inputType === 'radio'">
-          <v-radio v-for="choice in rule.choices" v-model="query.value" :input-value="choice.value" :label="choice.label"></v-radio>
+        <v-radio-group v-if="rule.inputType === 'radio'" v-model="query.value">
+          <v-radio v-for="choice in rule.choices" :value="choice.value" :label="choice.label"></v-radio>
         </v-radio-group>
 
         <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete></v-select>
 
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <v-btn @click="remove" v-html="labels.removeRule" primary></v-btn>
+        <v-btn fab dark small @click="remove" v-html="labels.removeRule" color="primary"></v-btn>
       </v-card-title>
     </v-card>
   </span>
