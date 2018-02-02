@@ -67,6 +67,36 @@
 
         <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete></v-select>
 
+        <v-menu
+          v-if="rule.inputType === 'date'"
+          lazy
+          :close-on-content-click="false"
+          v-model="menu"
+          transition="scale-transition"
+          full-width
+          :nudge-right="40"
+          :nudge-bottom="50"
+          max-width="290px"
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            label="Picker in menu"
+            v-model="query.value"
+            prepend-icon="event"
+            readonly
+          ></v-text-field>
+          <v-date-picker v-model="query.value" no-title scrollable actions>
+            <template slot-scope="{ save, cancel }">
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+                <v-btn flat color="primary" @click="save">OK</v-btn>
+              </v-card-actions>
+            </template>
+          </v-date-picker>
+        </v-menu>
+
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
         <v-btn fab dark small @click="remove" v-html="labels.removeRule" color="primary"></v-btn>
@@ -82,6 +112,12 @@ export default {
   name: "query-builder-rule",
 
   props: ['query', 'index', 'rule', 'styled', 'vuetify', 'labels'],
+
+  data() {
+    return {
+      menu: false
+    }
+  },
 
   beforeMount () {
     if (this.rule.type === 'custom-component') {
