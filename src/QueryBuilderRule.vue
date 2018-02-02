@@ -81,7 +81,6 @@
         >
           <v-text-field
             slot="activator"
-            label="Picker in menu"
             v-model="query.value"
             prepend-icon="event"
             readonly
