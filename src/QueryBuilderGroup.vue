@@ -119,9 +119,9 @@ export default {
       let child = {
         type: 'query-builder-rule',
         query: {
-          rule: this.rules[this.selectedRule].id,
-          selectedOperator: 0,
-          selectedOperand: typeof this.rules[this.selectedRule].operands === "undefined" ? this.rules[this.selectedRule].label : 0,
+          rule: this.selectedRule.id,
+          selectedOperator: this.selectedRule.operators[0],
+          selectedOperand: typeof this.selectedRule.operands === "undefined" ? this.selectedRule.label : this.selectedRule.operands[0],
           value: null
         }
       };
@@ -160,7 +160,7 @@ export default {
 
   data () {
     return {
-      selectedRule: 0
+      selectedRule: this.rules[0]
     }
   },
 
@@ -173,6 +173,12 @@ export default {
       classObject['depth-' + this.depth.toString()] = this.styled;
 
       return classObject;
+    }
+  },
+
+  watch: {
+    rules(val) {
+      this.selectedRule = this.rules.indexOf(this.selectedRule)
     }
   }
 }
