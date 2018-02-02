@@ -59,10 +59,10 @@
           <component :value="query.value" @input="updateQuery" :is="rule.component" v-bind="rule.props"></component>
         </template>
 
-        <v-checkbox v-if="rule.inputType === 'checkbox'" v-for="choice in rule.choices" v-model="query.value" :true-value="choice.value" :label="choice.label"></v-checkbox>
+        <v-checkbox v-if="rule.inputType === 'checkbox'" v-for="choice in rule.choices" v-model="query.value" :true-value="choice.value" :label="choice.label" :key="choice.label+choice.value"></v-checkbox>
 
         <v-radio-group v-if="rule.inputType === 'radio'" v-model="query.value">
-          <v-radio v-for="choice in rule.choices" :value="choice.value" :label="choice.label"></v-radio>
+          <v-radio v-for="choice in rule.choices" :value="choice.value" :label="choice.label" :key="choice.label+choice.value"></v-radio>
         </v-radio-group>
 
         <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete></v-select>
