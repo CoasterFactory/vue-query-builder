@@ -50,13 +50,13 @@
     <v-card color="grey lighten-4" v-else>
       <v-toolbar color="white" light dense>
         <h3 class="pr-3">{{ labels.matchType }}</h3>
-        <v-select id="vqb-match-type" v-model="query.logicalOperator" :items="[labels.matchTypeAll, labels.matchTypeAny]" autocomplete cache-items></v-select>
+        <v-select id="vqb-match-type" v-model="query.logicalOperator" :items="[labels.matchTypeAll, labels.matchTypeAny]" autocomplete></v-select>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
         <v-btn fab dark small v-if="this.depth > 1" @click="remove" v-html="labels.removeGroup" color="primary"></v-btn>
       </v-toolbar>
       <v-card-title class="py-0">
-        <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete></v-select>
+        <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete cache-items></v-select>
         <v-btn @click="addRule" v-html="labels.addRule" color="primary"></v-btn>
         <v-btn v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup" color="primary"></v-btn>
         <v-spacer></v-spacer>
