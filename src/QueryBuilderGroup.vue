@@ -56,7 +56,7 @@
         <v-btn fab dark small v-if="this.depth > 1" @click="remove" v-html="labels.removeGroup" color="primary"></v-btn>
       </v-toolbar>
       <v-card-title class="py-0">
-        <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete cache-items></v-select>
+        <v-select v-model="selectedRule" :items="rules" item-text="label" autocomplete></v-select>
         <v-btn @click="addRule" v-html="labels.addRule" color="primary"></v-btn>
         <v-btn v-if="this.depth < this.maxDepth" @click="addGroup" v-html="labels.addGroup" color="primary"></v-btn>
         <v-spacer></v-spacer>

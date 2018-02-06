@@ -48,9 +48,9 @@
       <v-card-title class="py-0">
         <h3 class="pr-3">{{ rule.label }}</h3>
 
-        <v-select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :items="rule.operands" autocomplete cache-items></v-select>
+        <v-select v-if="typeof rule.operands !== 'undefined'" v-model="query.selectedOperand" :items="rule.operands" autocomplete></v-select>
 
-        <v-select v-if="! isMultipleChoice" v-model="query.selectedOperator" :items="rule.operators" autocomplete cache-items></v-select>
+        <v-select v-if="! isMultipleChoice" v-model="query.selectedOperator" :items="rule.operators" autocomplete></v-select>
 
         <v-text-field v-if="rule.inputType === 'text'" type="text" v-model="query.value" :placeholder="labels.textInputPlaceholder"></v-text-field>
         <v-text-field v-if="rule.inputType === 'number'" type="number" v-model="query.value"></v-text-field>
@@ -65,7 +65,7 @@
           <v-radio v-for="choice in rule.choices" :value="choice.value" :label="choice.label" :key="choice.label+choice.value"></v-radio>
         </v-radio-group>
 
-        <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete cache-items></v-select>
+        <v-select v-if="rule.inputType === 'select'" :multiple="rule.type === 'multi-select'" v-model="query.value" :items="rule.choices" item-text="label" autocomplete></v-select>
 
         <v-menu
           v-if="rule.inputType === 'date'"
